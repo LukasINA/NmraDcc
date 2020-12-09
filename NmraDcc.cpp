@@ -407,9 +407,11 @@ void ExternalInterruptHandler(void)
         #if defined ( __STM32F1__ )
         detachInterrupt( DccProcState.ExtIntNum );
         #endif
-        #ifdef ESP32
+        #if defined ( ESP32 )
         ISRWatch = ISREdge;
-        #else
+        #elif defined ( __AVR_ATmega4809__ )
+		attachInterrupt( DccProcState.ExtIntNum, ExternalInterruptHandler, (PinStatus)ISREdge );
+		#else
         attachInterrupt( DccProcState.ExtIntNum, ExternalInterruptHandler, ISREdge );
         #endif
         // enable level-checking
@@ -492,7 +494,9 @@ void ExternalInterruptHandler(void)
 				#endif
                 #ifdef ESP32
 				ISRWatch = ISREdge;
-                #else
+				#elif defined ( __AVR_ATmega4809__ )
+				attachInterrupt( DccProcState.ExtIntNum, ExternalInterruptHandler, (PinStatus)ISREdge );
+				#else
                 attachInterrupt( DccProcState.ExtIntNum, ExternalInterruptHandler, ISREdge );
                 // enable level checking ( with direct port reading @ AVR )
                 ISRChkMask = DccProcState.ExtIntMask;       
@@ -542,7 +546,9 @@ void ExternalInterruptHandler(void)
         #endif
         #ifdef ESP32
         ISRWatch = ISREdge;
-        #else
+		#elif defined ( __AVR_ATmega4809__ )
+		attachInterrupt( DccProcState.ExtIntNum, ExternalInterruptHandler, (PinStatus)ISREdge );
+		#else
         attachInterrupt( DccProcState.ExtIntNum, ExternalInterruptHandler, ISREdge );
         #endif
         // enable level-checking
@@ -585,6 +591,8 @@ void ExternalInterruptHandler(void)
 		#endif
         #ifdef ESP32
         ISRWatch = ISREdge;
+		#elif defined ( __AVR_ATmega4809__ )
+		attachInterrupt( DccProcState.ExtIntNum, ExternalInterruptHandler, (PinStatus)ISREdge );
         #else
 		attachInterrupt( DccProcState.ExtIntNum, ExternalInterruptHandler, ISREdge );
         #endif
